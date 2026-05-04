@@ -34,20 +34,13 @@ And the output file will be `apk_to_decompile-dex2jar.jar`.
 
 ## AI / Claude Code Integration
 
-This repository doubles as a **Claude Code Skill** for AI-assisted Android reverse engineering.
+This repository is also a **Claude Code Skill** for AI-assisted reverse engineering.
 
-### Install as Skill
 ```bash
-claude skill add https://github.com/CC11001100/AI-dex2jar.git
+claude plugin add https://github.com/CC11001100/AI-dex2jar.git
 ```
 
-### Use in Claude Code
-```
-/dex2jar dex2jar app.apk
-/dex2jar baksmali classes.dex
-```
-
-See [README.skills.md](README.skills.md) for full documentation.
+Then use slash commands like `/dex2jar app.apk` in Claude Code. See [README.skills.md](README.skills.md) for details.
 
 ## Need help ?
 post on issue trackers list above.

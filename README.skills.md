@@ -1,64 +1,36 @@
-# AI-dex2jar as Claude Code Skill
+# dex2jar - Claude Code Skill
 
-## Quick Install
+Android reverse engineering toolkit for AI agents.
 
-Add this repository as a skill source in Claude Code:
+## Install
 
 ```bash
-# Install via Claude Code CLI
-claude skill add https://github.com/CC11001100/AI-dex2jar.git
+claude plugin add https://github.com/CC11001100/AI-dex2jar.git
 ```
 
-Or manually add to your `.claude/settings.json`:
+## Commands
 
-```json
-{
-  "skills": {
-    "ai-dex2jar": {
-      "source": "https://github.com/CC11001100/AI-dex2jar.git"
-    }
-  }
-}
-```
-
-## Usage
-
-After installation, use the `/dex2jar` slash command in Claude Code:
-
-```
-/dex2jar dex2jar app.apk
-/dex2jar baksmali classes.dex
-/dex2jar apk-sign app.apk
-```
-
-Or invoke the reverse-engineer agent for comprehensive analysis:
-
-```
-/dex2jar analyze app.apk
-```
+| Slash Command | Description |
+|--------------|-------------|
+| `/dex2jar` | Convert DEX/APK to JAR |
+| `/baksmali` | Disassemble DEX to smali |
+| `/jar2dex` | Convert JAR to DEX |
+| `/jar-access` | Modify JAR access flags |
+| `/apk-sign` | Sign APK with test cert |
+| `/list-tools` | List all available tools |
 
 ## Prerequisites
 
-- Java 8+ (required by dex2jar tools)
-- Python 3.10+ (required by CLI wrapper)
-- Build dex2jar first: `./gradlew distZip`
+- Java 8+
+- Python 3.10+
+- Build dex2jar: `./gradlew distZip`
 
-## Available Commands
+## CLI Wrapper
 
-| Command | Description |
-|---------|-------------|
-| `dex2jar` | Convert .dex/.apk to .jar |
-| `jar2dex` | Convert .jar to .dex |
-| `baksmali` | Disassemble .dex to smali |
-| `smali` | Assemble smali to .dex |
-| `apk-sign` | Sign APK with test certificate |
-| `jar-access` | Modify access flags in jar |
-| `asm-verify` | Verify .class in jar |
-| `jar2jasmin` | Disassemble .class to jasmin |
-| `jasmin2jar` | Assemble jasmin to jar |
-| `decrypt-string` | Decrypt strings in class |
-| `std-apk` | Clean APK to standard zip |
-| `dex-recompute-checksum` | Recompute dex checksum |
-| `dex-weaver` | Replace invoke in dex |
-| `jar-weaver` | Replace invoke in jar |
-| `class-version-switch` | Switch class file version |
+All commands use `d2j-ai.py` which outputs structured JSON:
+
+```bash
+python3 d2j-ai.py dex2jar app.apk
+python3 d2j-ai.py baksmali classes.dex
+python3 d2j-ai.py list
+```
