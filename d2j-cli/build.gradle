@@ -1,0 +1,20 @@
+description = 'AI-friendly CLI for dex2jar tools'
+
+apply plugin: 'application'
+
+mainClassName = 'com.googlecode.dex2jar.cli.D2jAiCli'
+
+dependencies {
+    compile project(':dex-tools')
+    compile project(':d2j-smali')
+    compile project(':d2j-jasmin')
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    testCompile group: 'junit', name: 'junit', version: '4.13.2'
+}
+
+applicationDistribution.from("$parent.rootDir") {
+    include("NOTICE.txt")
+    include("LICENSE.txt")
+}
+
+startScripts.applicationName = 'd2j'

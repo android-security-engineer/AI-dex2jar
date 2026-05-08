@@ -1,0 +1,25 @@
+# Gradle build artifacts
+build/
+.gradle/
+*/build/
+
+# IDE files
+.idea/
+*.iml
+.eclipse/
+.settings/
+.classpath
+.project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Temporary docs
+docs/superpowers/
