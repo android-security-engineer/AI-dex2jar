@@ -1,0 +1,13 @@
+description = 'dex2jar AI CLI'
+apply plugin: 'application'
+
+mainClassName = "com.googlecode.d2j.ai.D2jAiMain"
+applicationName = 'd2j-ai'
+
+dependencies {
+    compile project(':dex-tools')
+    compile project(':d2j-base-cmd')
+    compile project(':d2j-smali')
+    compile project(':d2j-jasmin')
+    compile 'info.picocli:picocli:4.7.6'
+}

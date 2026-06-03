@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dex2jar-mcp"
+version = "1.0.0"
+description = "MCP server exposing dex2jar reverse engineering tools"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+]
+
+[project.scripts]
+dex2jar-mcp = "server:mcp.run"
+
+[tool.setuptools]
+py-modules = ["server"]
