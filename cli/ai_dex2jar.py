@@ -300,10 +300,94 @@ def cmd_class_version_switch(args: list[str]) -> dict[str, Any]:
     return run_d2j_command("d2j-class-version-switch", args)
 
 
+def cmd_dex2smali(args: list[str]) -> dict[str, Any]:
+    """Disassemble .dex to smali (alias for baksmali)"""
+    if not args:
+        return {
+            "success": False,
+            "error": "Usage: d2j-dex2smali <dex-file>",
+            "description": "Disassemble dex to smali files",
+        }
+    return run_d2j_command("d2j-dex2smali", args)
+
+
+def cmd_mt_dex2jar(args: list[str]) -> dict[str, Any]:
+    """Convert .dex/.apk to .jar using multiple threads"""
+    if not args:
+        return {
+            "success": False,
+            "error": "Usage: d2j-mt-dex2jar <file0> [file1 ...] [-o output.jar]",
+            "description": "Multi-threaded dex to jar conversion",
+            "options": {
+                "-o, --output": "Output .jar file path",
+                "-f, --force": "Force overwrite",
+                "-mt, --multi-thread": "Number of threads (default 4)",
+                "-fl, --file-list": "File containing list of dex files to process",
+            },
+        }
+    return run_d2j_command("d2j-mt-dex2jar", args)
+
+
+def cmd_init_deobf(args: list[str]) -> dict[str, Any]:
+    """Generate deobfuscation init config for .jar"""
+    if not args:
+        return {
+            "success": False,
+            "error": "Usage: d2j-init-deobf <jar-file>",
+            "description": "Generate an init config file for de-obfuscating a jar",
+            "options": {
+                "-o, --output": "Output config file path",
+                "-f, --force": "Force overwrite",
+                "-min, --min-length": "Rename if name length < MIN (default 2)",
+                "-max, --max-length": "Rename if name length > MAX (default 40)",
+            },
+        }
+    return run_d2j_command("d2j-init-deobf", args)
+
+
+def cmd_generate_stub_from_odex(args: list[str]) -> dict[str, Any]:
+    """Generate no-code stub .jar from .odex"""
+    if not args:
+        return {
+            "success": False,
+            "error": "Usage: d2j-generate-stub-from-odex <odex0> [odex1 ...]",
+            "description": "Generate no-code jar from odex files",
+            "options": {
+                "-o, --output": "Output .jar file (default stub.jar)",
+                "-npri, --no-private": "Exclude private members",
+            },
+        }
+    return run_d2j_command("d2j-generate-stub-from-odex", args)
+
+
+def cmd_extract_odex_from_coredump(args: list[str]) -> dict[str, Any]:
+    """Extract .odex from dalvik memory core dump"""
+    if not args:
+        return {
+            "success": False,
+            "error": "Usage: d2j-extract-odex-from-coredump <core.xxxx>",
+            "description": "Extract odex from dalvik memory core dump",
+        }
+    return run_d2j_command("d2j-extract-odex-from-coredump", args)
+
+
+def cmd_dex_asmifier(args: list[str]) -> dict[str, Any]:
+    """Generate ASMifier output from .dex files"""
+    if not args:
+        return {
+            "success": False,
+            "error": "Usage: d2j-dex-asmifier <dex0> [dex1 ...]",
+            "description": "Generate ASMifier Java source from dex files",
+        }
+    return run_d2j_command("d2j-dex-asmifier", args)
+
+
 COMMANDS = {
     "dex2jar": cmd_dex2jar,
+    "mt-dex2jar": cmd_mt_dex2jar,
     "jar2dex": cmd_jar2dex,
     "baksmali": cmd_baksmali,
+    "dex2smali": cmd_dex2smali,
     "smali": cmd_smali,
     "apk-sign": cmd_apk_sign,
     "jar-access": cmd_jar_access,
@@ -311,11 +395,15 @@ COMMANDS = {
     "jar2jasmin": cmd_jar2jasmin,
     "jasmin2jar": cmd_jasmin2jar,
     "decrypt-string": cmd_decrypt_string,
+    "init-deobf": cmd_init_deobf,
     "std-apk": cmd_std_apk,
+    "dex-asmifier": cmd_dex_asmifier,
     "dex-recompute-checksum": cmd_dex_recompute_checksum,
     "dex-weaver": cmd_dex_weaver,
     "jar-weaver": cmd_jar_weaver,
     "class-version-switch": cmd_class_version_switch,
+    "generate-stub-from-odex": cmd_generate_stub_from_odex,
+    "extract-odex-from-coredump": cmd_extract_odex_from_coredump,
 }
 
 
