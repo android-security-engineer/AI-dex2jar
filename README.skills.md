@@ -5,7 +5,7 @@ Android reverse engineering toolkit for AI agents.
 ## Install
 
 ```bash
-claude plugin add https://github.com/CC11001100/AI-dex2jar.git
+claude plugin add https://github.com/android-security-engineer/dex2jar-skills.git
 ```
 
 ## Commands

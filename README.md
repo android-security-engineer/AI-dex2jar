@@ -37,7 +37,7 @@ And the output file will be `apk_to_decompile-dex2jar.jar`.
 This repository is also a **Claude Code Skill** for AI-assisted reverse engineering.
 
 ```bash
-claude plugin add https://github.com/CC11001100/AI-dex2jar.git
+claude plugin add https://github.com/android-security-engineer/dex2jar-skills.git
 ```
 
 Then use slash commands like `/dex2jar app.apk` in Claude Code. See [README.skills.md](README.skills.md) for details.

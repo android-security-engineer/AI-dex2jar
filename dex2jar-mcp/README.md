@@ -47,9 +47,9 @@ Add to `claude_desktop_config.json`:
   "mcpServers": {
     "dex2jar": {
       "command": "python3",
-      "args": ["path/to/AI-dex2jar/dex2jar-mcp/server.py"],
+      "args": ["path/to/dex2jar-skills/dex2jar-mcp/server.py"],
       "env": {
-        "D2J_AI_PATH": "path/to/AI-dex2jar/d2j-ai.py"
+        "D2J_AI_PATH": "path/to/dex2jar-skills/d2j-ai.py"
       }
     }
   }

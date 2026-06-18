@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AI-dex2jar: AI-friendly CLI wrapper for dex2jar reverse engineering tools.
+"""dex2jar-skills: AI-friendly CLI wrapper for dex2jar reverse engineering tools.
 
 Provides structured JSON output for all dex2jar commands,
 making it easy for AI agents to parse and use the results.
