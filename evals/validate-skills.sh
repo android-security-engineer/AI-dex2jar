@@ -119,6 +119,13 @@ sys.exit(rc)
 PY
 [ $? -eq 0 ] && PASS=$((PASS+1)) || FAIL=$((FAIL+1))
 
+echo "== README feature tree in sync with tools/feature_tree.py =="
+if python3 tools/feature_tree.py --check >/dev/null 2>&1; then
+  ok "feature tree in sync (README.md, README.zh-CN.md)"
+else
+  bad "feature tree stale — run: python3 tools/feature_tree.py --write"
+fi
+
 echo
 echo "== summary: $PASS passed, $FAIL failed =="
 [ "$FAIL" -eq 0 ] && printf '\xe2\x9c\x85 repo is a well-formed Skills/plugin repository\n' || printf '\xe2\x9d\x8c fix the above\n'
