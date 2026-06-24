@@ -1,0 +1,55 @@
+{
+  "marketplace": "dex2jar-skills",
+  "description": "Trigger + behavior evals for the dex2jar skills. Each eval names the skill it should route to and a realistic user prompt.",
+  "evals": [
+    {
+      "id": 1,
+      "skill": "apk-triage",
+      "prompt": "I pulled this app.apk off a device and have no idea what it is — can you give me a quick rundown of what it is, who signed it, and whether anything looks sketchy?",
+      "expected_output": "Routes to apk-triage; runs manifest-inspect, apk-cert, native-libs, dex-strings and summarizes identity, attack surface, signer, native footprint, indicators, and a risk read.",
+      "files": ["app.apk"]
+    },
+    {
+      "id": 2,
+      "skill": "apk-triage",
+      "prompt": "这个 apk 安全吗？它申请了哪些权限，有没有导出的组件？",
+      "expected_output": "Routes to apk-triage; manifest-inspect -e surfaces permissions + exported components, flags debuggable/allowBackup.",
+      "files": ["sample.apk"]
+    },
+    {
+      "id": 3,
+      "skill": "sensitive-api-audit",
+      "prompt": "Where does this APK do its encryption, and who calls into the crypto routines?",
+      "expected_output": "Routes to sensitive-api-audit; dex-xref --preset crypto locates sinks, dex-method-trace --target traces callers back to entry points.",
+      "files": ["app.apk"]
+    },
+    {
+      "id": 4,
+      "skill": "sensitive-api-audit",
+      "prompt": "这个应用有没有动态加载代码或者用反射来藏行为？帮我查一下。",
+      "expected_output": "Routes to sensitive-api-audit; dex-xref --preset dynload and --preset reflection, corroborated with strings.",
+      "files": ["app.apk"]
+    },
+    {
+      "id": 5,
+      "skill": "dex2jar",
+      "prompt": "Convert classes.dex to a jar I can open in a Java decompiler, and tell me if any methods didn't translate cleanly.",
+      "expected_output": "Routes to dex2jar; runs dex2jar then asm-verify, and explains DEX→JAR is lossy translation, flagging methods that fail verification.",
+      "files": ["classes.dex"]
+    },
+    {
+      "id": 6,
+      "skill": "dex2jar",
+      "prompt": "把这个 apk 反编译看看它到底做了什么。",
+      "expected_output": "Routes to dex2jar; chooses triage-then-convert, references dex-to-jar-accuracy caveats and smali ground-truth.",
+      "files": ["app.apk"]
+    },
+    {
+      "id": 7,
+      "skill": "dex2jar",
+      "prompt": "List the classes and methods in this dex and show me which other types each class depends on.",
+      "expected_output": "Routes to dex2jar; uses dex-inspect and dex-class-deps.",
+      "files": ["classes.dex"]
+    }
+  ]
+}

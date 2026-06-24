@@ -1,0 +1,27 @@
+# Prompts that should NOT load any dex2jar skill — unrelated to Android RE.
+# Used to check the skill descriptions don't over-trigger on adjacent topics.
+
+# General programming, no Android binary involved
+Help me write a Python function to sort a list of dicts by a key
+Create a React component for a login form
+Explain the difference between a process and a thread
+帮我写一个读取 CSV 的脚本
+
+# JVM / Java work that is NOT about Android reversing
+Set up a Maven build for my Spring Boot service
+Why is my Java stream throwing a NullPointerException?
+Refactor this Kotlin data class
+
+# Adjacent-but-different security topics (no APK/DEX/JAR artifact)
+Review my nginx TLS configuration
+How do I rotate AWS IAM access keys?
+Explain how a SQL injection works in general terms
+帮我看看这个网站的 XSS 漏洞
+
+# iOS / non-Android mobile
+Decompile this iOS .ipa file
+Analyze this Mach-O binary
+
+# Generic file ops that mention "jar"/"dex" only incidentally
+What does the jar command do in the JDK?
+My coffee order: a large flat white, no sugar

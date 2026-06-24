@@ -1,0 +1,31 @@
+# Prompts that SHOULD load a dex2jar skill (model-driven, via SKILL.md description).
+# Format: each non-comment line is a prompt; the [skill] tag marks the expected skill.
+# These are natural things a user would actually type — mixed EN/中文, casual, with context.
+
+# --- apk-triage ---
+[apk-triage] I grabbed this app.apk from a sketchy site, what is it and is it safe?
+[apk-triage] give me a quick recon of this apk before I dig in
+[apk-triage] who signed this apk? I want the certificate fingerprint
+[apk-triage] what's the attack surface of this app — exported components, permissions?
+[apk-triage] 这个apk安全吗，先帮我看一下
+[apk-triage] 它申请了什么权限，是谁签名的？
+[apk-triage] does this app ship any native libraries?
+
+# --- sensitive-api-audit ---
+[sensitive-api-audit] find where this app does encryption
+[sensitive-api-audit] does it load code at runtime or use reflection to hide stuff?
+[sensitive-api-audit] where does this apk make network calls?
+[sensitive-api-audit] who calls Cipher.doFinal in this dex?
+[sensitive-api-audit] find all usages of DexClassLoader
+[sensitive-api-audit] 找一下这个应用里加密的地方，谁调用的
+[sensitive-api-audit] 有没有用反射或者动态加载？
+
+# --- dex2jar (primary / broad) ---
+[dex2jar] convert classes.dex to a jar
+[dex2jar] decompile this apk so I can read the code
+[dex2jar] reverse engineer this android app
+[dex2jar] disassemble this dex to smali, I need to patch a method
+[dex2jar] extract the string constants from this apk
+[dex2jar] 把这个dex转成jar
+[dex2jar] 反编译看看这个安卓应用做了什么
+[dex2jar] list the classes and methods in this dex
