@@ -125,6 +125,29 @@ def dex2jar(input_file: str, output_file: str = "", extra_args: list[str] | None
 
 
 @mcp.tool()
+def mt_dex2jar(input_file: str, output_file: str = "", threads: int = 0, extra_args: list[str] | None = None) -> str:
+    """Convert DEX/APK files to JAR format using multiple threads.
+
+    Multi-threaded version of dex2jar for faster processing of large files.
+
+    Args:
+        input_file: Path to the input .dex or .apk file
+        output_file: Optional output JAR path
+        threads: Number of threads (0 = default, typically 4)
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if output_file:
+        args.extend(["-o", output_file])
+    if threads > 0:
+        args.extend(["-mt", str(threads)])
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("mt-dex2jar", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
 def jar2dex(input_file: str, output_file: str = "", extra_args: list[str] | None = None) -> str:
     """Convert JAR files to DEX format.
 
@@ -161,6 +184,24 @@ def baksmali(input_file: str, output_dir: str = "", extra_args: list[str] | None
     if extra_args:
         args.extend(extra_args)
     result = _run_d2j_ai("baksmali", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex2smali(input_file: str, output_dir: str = "", extra_args: list[str] | None = None) -> str:
+    """Disassemble DEX files to smali format (alias for baksmali).
+
+    Args:
+        input_file: Path to the input .dex file
+        output_dir: Optional output directory for smali files
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if output_dir:
+        args.extend(["-o", output_dir])
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex2smali", args)
     return json.dumps(result, indent=2)
 
 
@@ -294,6 +335,380 @@ def asm_verify(input_file: str, extra_args: list[str] | None = None) -> str:
 
 
 @mcp.tool()
+def init_deobf(input_file: str, output_file: str = "", min_length: int = 0, max_length: int = 0, extra_args: list[str] | None = None) -> str:
+    """Generate deobfuscation init config for JAR files.
+
+    Creates a configuration file for renaming obfuscated classes and methods.
+
+    Args:
+        input_file: Path to the input .jar file
+        output_file: Optional output config file path
+        min_length: Rename if name length less than this (0 = default 2)
+        max_length: Rename if name length greater than this (0 = default 40)
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if output_file:
+        args.extend(["-o", output_file])
+    if min_length > 0:
+        args.extend(["-min", str(min_length)])
+    if max_length > 0:
+        args.extend(["-max", str(max_length)])
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("init-deobf", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def std_apk(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Clean up APK to standard zip format.
+
+    Normalizes an APK file's zip structure.
+
+    Args:
+        input_file: Path to the APK file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("std-apk", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_recompute_checksum(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Recompute CRC and SHA1 checksums of DEX files.
+
+    Recalculates the header checksums after DEX file modifications.
+
+    Args:
+        input_file: Path to the .dex file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-recompute-checksum", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_weaver(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Replace method invocations in DEX files.
+
+    Weaves code replacements at invoke sites in DEX bytecode.
+
+    Args:
+        input_file: Path to the .dex file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-weaver", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def jar_weaver(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Replace method invocations in JAR files.
+
+    Weaves code replacements at invoke sites in Java bytecode.
+
+    Args:
+        input_file: Path to the .jar file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("jar-weaver", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def class_version_switch(version: str, old_jar: str, new_jar: str, extra_args: list[str] | None = None) -> str:
+    """Switch .class file version in JAR files.
+
+    Changes the Java class file version (e.g. from Java 8 to Java 6).
+
+    Args:
+        version: Target class file version number
+        old_jar: Path to the input JAR file
+        new_jar: Path to the output JAR file
+        extra_args: Additional flags
+    """
+    args = [version, old_jar, new_jar]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("class-version-switch", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def generate_stub_from_odex(input_file: str, output_file: str = "", no_private: bool = False, extra_args: list[str] | None = None) -> str:
+    """Generate no-code stub JAR from ODEX files.
+
+    Creates a JAR with method signatures but no implementations (stubs).
+
+    Args:
+        input_file: Path to the .odex file
+        output_file: Optional output JAR path (default stub.jar)
+        no_private: Exclude private members from stubs
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if output_file:
+        args.extend(["-o", output_file])
+    if no_private:
+        args.append("-npri")
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("generate-stub-from-odex", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def extract_odex_from_coredump(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Extract ODEX from Dalvik memory core dump.
+
+    Recovers .odex files from Android process memory dumps.
+
+    Args:
+        input_file: Path to the core dump file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("extract-odex-from-coredump", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_asmifier(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Generate ASMifier Java source from DEX files.
+
+    Converts DEX bytecode to ASMifier Java source code for analysis.
+
+    Args:
+        input_file: Path to the .dex file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-asmifier", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_inspect(input_file: str, filter: str = "", detail: bool = False, strings: bool = False, extra_args: list[str] | None = None) -> str:
+    """Inspect DEX/APK structure — list classes, methods, and fields.
+
+    Provides structured analysis of DEX file contents without full decompilation.
+    Useful for quick reconnaissance before deciding which tools to use.
+
+    Args:
+        input_file: Path to the .dex or .apk file
+        filter: Filter class names by pattern (substring match)
+        detail: Show method and field details for each class
+        strings: Include string constants from fields
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if filter:
+        args.extend(["-f", filter])
+    if detail:
+        args.append("-d")
+    if strings:
+        args.append("-s")
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-inspect", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_strings(input_file: str, filter: str = "", class_filter: str = "", unique: bool = False, extra_args: list[str] | None = None) -> str:
+    """Extract string constants from a DEX/APK file.
+
+    Pulls const-string literals from method bodies and static field constants.
+    Useful for finding URLs, API keys, log messages, and other indicators
+    without decompiling the whole app.
+
+    Args:
+        input_file: Path to the .dex or .apk file
+        filter: Only return strings containing this substring
+        class_filter: Only scan classes whose name contains this substring
+        unique: Deduplicate identical string values
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if filter:
+        args.extend(["-f", filter])
+    if class_filter:
+        args.extend(["-c", class_filter])
+    if unique:
+        args.append("-u")
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-strings", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_method_trace(input_file: str, class_filter: str = "", target: str = "", extra_args: list[str] | None = None) -> str:
+    """Build a method call graph from a DEX/APK file.
+
+    Lists caller→callee edges. Use `target` to answer "who calls X?" by
+    finding all callers of methods matching a pattern (owner.name).
+
+    Args:
+        input_file: Path to the .dex or .apk file
+        class_filter: Only trace methods in classes matching this substring
+        target: Find callers of methods matching this substring (owner.name)
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if class_filter:
+        args.extend(["-c", class_filter])
+    if target:
+        args.extend(["-t", target])
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-method-trace", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_class_deps(input_file: str, class_filter: str = "", deep: bool = False, internal_only: bool = False, extra_args: list[str] | None = None) -> str:
+    """Analyze class dependencies in a DEX/APK file.
+
+    For each class, reports the other types it depends on: superclass,
+    interfaces, field types, method signatures, and (with deep) types
+    referenced in method bodies.
+
+    Args:
+        input_file: Path to the .dex or .apk file
+        class_filter: Only analyze classes matching this substring
+        deep: Include dependencies from method bodies (invokes, field access)
+        internal_only: Only show dependencies on classes defined in this DEX
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if class_filter:
+        args.extend(["-c", class_filter])
+    if deep:
+        args.append("-d")
+    if internal_only:
+        args.append("-i")
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-class-deps", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def dex_xref(input_file: str, to: str = "", preset: str = "", kinds: str = "", extra_args: list[str] | None = None) -> str:
+    """Reverse cross-reference — find every usage site of a symbol or sensitive-API preset.
+
+    Answers "where is X used?" by scanning all method bodies for invokes, field
+    accesses, type references, and string constants that match, reporting each
+    site with its enclosing method and opcode. Turns "see structure" into "find
+    the sink".
+
+    Args:
+        input_file: Path to the .dex or .apk file
+        to: Match symbols containing this substring (class/method/field/string)
+        preset: Sensitive-API preset — one of crypto, reflection, dynload, net
+        kinds: Restrict match kinds, comma-separated subset of method,field,type,string
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if to:
+        args.extend(["-t", to])
+    if preset:
+        args.extend(["-p", preset])
+    if kinds:
+        args.extend(["-k", kinds])
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("dex-xref", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def manifest_inspect(input_file: str, exported_only: bool = False, extra_args: list[str] | None = None) -> str:
+    """Parse a binary AndroidManifest.xml (AXML) from an APK.
+
+    Self-contained AXML decoder — no aapt required. Reports package, version,
+    min/target/compile SDK, the debuggable / allowBackup flags, declared
+    permissions, and every component (activity/service/receiver/provider) with
+    its exported status (explicit android:exported vs. implicit via intent-filter),
+    guarding permission, and intent actions.
+
+    Args:
+        input_file: Path to the .apk file (or a raw AndroidManifest.xml)
+        exported_only: Only report exported components (the external attack surface)
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if exported_only:
+        args.append("-e")
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("manifest-inspect", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def apk_cert(input_file: str, extra_args: list[str] | None = None) -> str:
+    """Read an APK's v1 (JAR) signing certificates.
+
+    Parses META-INF/*.RSA|*.DSA|*.EC via the JDK CertificateFactory and reports
+    subject, issuer, serial, validity window, key type/size, signature algorithm,
+    and SHA-256 / SHA-1 / MD5 fingerprints — the fingerprints identify the signer
+    and let you cluster same-author APKs.
+
+    Args:
+        input_file: Path to the .apk file
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("apk-cert", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
+def native_libs(input_file: str, symbols: bool = False, extra_args: list[str] | None = None) -> str:
+    """Enumerate an APK's native .so libraries and their exported JNI entry points.
+
+    Walks lib/<abi>/*.so and parses each ELF directly (self-contained — no NDK or
+    binutils). Reports ABI, ELF class/byte order/machine, dynsym count, and the
+    exported JNI symbols (JNI_OnLoad plus every Java_<pkg>_<Class>_<method> bridge).
+    The Java_* names point at exactly where execution crosses from Java into native
+    code. Also accepts a standalone .so file.
+
+    Args:
+        input_file: Path to the .apk file (or a standalone .so)
+        symbols: Include the full list of JNI symbol names per library
+        extra_args: Additional flags
+    """
+    args = [input_file]
+    if symbols:
+        args.append("-s")
+    if extra_args:
+        args.extend(extra_args)
+    result = _run_d2j_ai("native-libs", args)
+    return json.dumps(result, indent=2)
+
+
+@mcp.tool()
 def run_d2j_command(command: str, args: list[str] | None = None, timeout: int = 300) -> str:
     """Run any dex2jar command with custom arguments.
 
@@ -334,8 +749,8 @@ def get_version() -> str:
     return json.dumps({
         "name": "dex2jar",
         "version": "2.x",
-        "mcp_server_version": "1.0.0",
-        "tools_count": 15,
+        "mcp_server_version": "1.3.0",
+        "tools_count": 29,
     }, indent=2)
 
 

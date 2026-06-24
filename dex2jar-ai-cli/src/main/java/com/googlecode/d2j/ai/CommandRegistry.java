@@ -19,11 +19,18 @@ public class CommandRegistry {
         cmds.put("dex2jar", com.googlecode.dex2jar.tools.Dex2jarCmd.class);
         descs.put("dex2jar", "Convert .dex/.apk to .jar");
 
+        cmds.put("mt-dex2jar", com.googlecode.dex2jar.tools.Dex2jarMultiThreadCmd.class);
+        descs.put("mt-dex2jar", "Convert .dex/.apk to .jar using multiple threads");
+
         cmds.put("jar2dex", com.googlecode.dex2jar.tools.Jar2Dex.class);
         descs.put("jar2dex", "Convert .jar to .dex");
 
         cmds.put("baksmali", com.googlecode.d2j.smali.BaksmaliCmd.class);
         descs.put("baksmali", "Disassemble .dex to smali files");
+
+        // dex2smali is an alias of baksmali (DEX -> smali), kept for CLI parity.
+        cmds.put("dex2smali", com.googlecode.d2j.smali.BaksmaliCmd.class);
+        descs.put("dex2smali", "Disassemble .dex to smali files (alias of baksmali)");
 
         cmds.put("smali", com.googlecode.d2j.smali.SmaliCmd.class);
         descs.put("smali", "Assemble smali files into .dex");
@@ -61,6 +68,36 @@ public class CommandRegistry {
         cmds.put("init-deobf", com.googlecode.dex2jar.tools.DeObfInitCmd.class);
         descs.put("init-deobf", "Generate init config file for deobfuscation");
 
+        cmds.put("generate-stub-from-odex", com.googlecode.dex2jar.tools.GenerateCompileStubFromOdex.class);
+        descs.put("generate-stub-from-odex", "Generate compile stubs from .odex files");
+
+        cmds.put("extract-odex-from-coredump", com.googlecode.dex2jar.tools.ExtractOdexFromCoredumpCmd.class);
+        descs.put("extract-odex-from-coredump", "Extract .odex from a Dalvik memory core dump");
+
+        cmds.put("dex-inspect", com.googlecode.d2j.ai.DexInspectCmd.class);
+        descs.put("dex-inspect", "Inspect DEX/APK structure — list classes, methods, fields");
+
+        cmds.put("dex-strings", com.googlecode.d2j.ai.DexStringsCmd.class);
+        descs.put("dex-strings", "Extract string constants from .dex/.apk");
+
+        cmds.put("dex-method-trace", com.googlecode.d2j.ai.DexMethodTraceCmd.class);
+        descs.put("dex-method-trace", "Build method call graph from .dex/.apk");
+
+        cmds.put("dex-class-deps", com.googlecode.d2j.ai.DexClassDepsCmd.class);
+        descs.put("dex-class-deps", "Analyze class dependencies in .dex/.apk");
+
+        cmds.put("dex-xref", com.googlecode.d2j.ai.DexXrefCmd.class);
+        descs.put("dex-xref", "Reverse cross-reference: find usage sites of a symbol or sensitive-API preset");
+
+        cmds.put("manifest-inspect", com.googlecode.d2j.ai.ManifestInspectCmd.class);
+        descs.put("manifest-inspect", "Parse binary AndroidManifest.xml — package, SDK, permissions, exported components");
+
+        cmds.put("apk-cert", com.googlecode.d2j.ai.ApkCertCmd.class);
+        descs.put("apk-cert", "Read v1 signing certificates — subject/issuer/validity + SHA-256/SHA-1 fingerprints");
+
+        cmds.put("native-libs", com.googlecode.d2j.ai.NativeLibsCmd.class);
+        descs.put("native-libs", "Enumerate lib/*/*.so — ABI, ELF identity, and exported JNI symbols");
+
         COMMANDS = Collections.unmodifiableMap(cmds);
         DESCRIPTIONS = Collections.unmodifiableMap(descs);
 
@@ -69,6 +106,9 @@ public class CommandRegistry {
 
         staticCmds.put("class-version-switch", "com.googlecode.dex2jar.tools.ClassVersionSwitch");
         staticDescs.put("class-version-switch", "Switch .class file version");
+
+        staticCmds.put("dex-asmifier", "com.googlecode.d2j.util.ASMifierFileV");
+        staticDescs.put("dex-asmifier", "Generate ASMifier Java source from .dex files");
 
         STATIC_MAIN_COMMANDS = Collections.unmodifiableMap(staticCmds);
         STATIC_MAIN_DESCRIPTIONS = Collections.unmodifiableMap(staticDescs);

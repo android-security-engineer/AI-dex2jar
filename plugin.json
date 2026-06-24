@@ -9,9 +9,9 @@
     "homepage": "https://github.com/android-security-engineer/dex2jar-skills",
     "repository": "https://github.com/android-security-engineer/dex2jar-skills",
     "license": "Apache-2.0",
-    "commands": "../commands/",
-    "agents": "../agents/",
-    "skills": "../skills/",
+    "commands": "./commands/",
+    "agents": "./agents/",
+    "skills": "./skills/",
     "keywords": [
         "android",
         "reverse-engineering",

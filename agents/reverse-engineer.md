@@ -14,10 +14,10 @@ Analyze Android binary files (APK, DEX, JAR) to extract information, trace code 
 
 ## Available Tools
 
-Use the Python CLI wrapper at `cli/ai_dex2jar.py` to invoke dex2jar commands:
+Use the Python CLI wrapper at `d2j-ai.py` to invoke dex2jar commands:
 
 ```bash
-python3 cli/ai_dex2jar.py <command> [args...]
+python3 d2j-ai.py <command> [args...]
 ```
 
 ## Analysis Workflow
@@ -27,21 +27,33 @@ python3 cli/ai_dex2jar.py <command> [args...]
 - Check file size and structure
 - Determine analysis goals with the user
 
-**2. Conversion Phase**
-- APK/DEX → JAR: `python3 cli/ai_dex2jar.py dex2jar <file>`
-- JAR → DEX: `python3 cli/ai_dex2jar.py jar2dex <file>`
-- DEX → SMALI: `python3 cli/ai_dex2jar.py baksmali <file>`
+**2. Reconnaissance Phase** (fast, no decompilation)
+- Structure overview: `python3 d2j-ai.py dex-inspect <file>` — classes, methods, fields
+- Extract strings: `python3 d2j-ai.py dex-strings <file> -f http` — find URLs, keys, IoCs
+- Call graph / find callers: `python3 d2j-ai.py dex-method-trace <file> -t Cipher.getInstance`
+- Class dependencies: `python3 d2j-ai.py dex-class-deps <file> -i` — internal architecture map
 
-**3. Analysis Phase**
-- Verify class integrity: `python3 cli/ai_dex2jar.py asm-verify <jar>`
-- Disassemble to jasmin: `python3 cli/ai_dex2jar.py jar2jasmin <jar>`
-- Decrypt strings: `python3 cli/ai_dex2jar.py decrypt-string <jar>`
-- Modify access flags: `python3 cli/ai_dex2jar.py jar-access <jar> -ac public`
+These commands read the DEX binary directly (via the dex2jar-ai-cli Java module) and are much faster than full conversion. Use them first to decide where to focus.
 
-**4. Modification Phase** (if requested)
-- Weave code: `python3 cli/ai_dex2jar.py dex-weaver` or `jar-weaver`
-- Recompute checksums: `python3 cli/ai_dex2jar.py dex-recompute-checksum <dex>`
-- Sign APK: `python3 cli/ai_dex2jar.py apk-sign <apk>`
+**3. Conversion Phase**
+- APK/DEX → JAR: `python3 d2j-ai.py dex2jar <file>`
+- JAR → DEX: `python3 d2j-ai.py jar2dex <file>`
+- DEX → SMALI: `python3 d2j-ai.py baksmali <file>`
+- Verify classes: `python3 d2j-ai.py asm-verify <jar>`
+- Decompile to jasmin: `python3 d2j-ai.py jar2jasmin <jar>`
+- Decrypt strings: `python3 d2j-ai.py decrypt-string <jar>`
+- Modify access flags: `python3 d2j-ai.py jar-access <jar> -ac public`
+
+**4. Analysis Phase**
+- Verify class integrity: `python3 d2j-ai.py asm-verify <jar>`
+- Disassemble to jasmin: `python3 d2j-ai.py jar2jasmin <jar>`
+- Decrypt strings: `python3 d2j-ai.py decrypt-string <jar>`
+- Modify access flags: `python3 d2j-ai.py jar-access <jar> -ac public`
+
+**5. Modification Phase** (if requested)
+- Weave code: `python3 d2j-ai.py dex-weaver` or `jar-weaver`
+- Recompute checksums: `python3 d2j-ai.py dex-recompute-checksum <dex>`
+- Sign APK: `python3 d2j-ai.py apk-sign <apk>`
 
 ## Output Guidance
 
