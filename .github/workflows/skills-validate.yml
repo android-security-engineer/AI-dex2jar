@@ -1,0 +1,38 @@
+name: Skills Validate
+
+# Structural gate for the Skills/plugin layer. Runs the offline validator that
+# checks manifests parse, SKILL.md frontmatter is well-formed, referenced files
+# and CLI commands exist, and trigger fixtures are tagged. Does NOT call a model.
+on:
+  push:
+    branches: [ 2.x ]
+    paths:
+      - 'skills/**'
+      - 'evals/**'
+      - 'commands/**'
+      - 'agents/**'
+      - 'plugin.json'
+      - '.claude-plugin/**'
+      - 'd2j-ai.py'
+      - '.github/workflows/skills-validate.yml'
+  pull_request:
+    branches: [ 2.x ]
+    paths:
+      - 'skills/**'
+      - 'evals/**'
+      - 'commands/**'
+      - 'agents/**'
+      - 'plugin.json'
+      - '.claude-plugin/**'
+      - 'd2j-ai.py'
+      - '.github/workflows/skills-validate.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # ubuntu-latest ships python3; the validator needs only bash + python3.
+      - name: Validate Skills repo structure
+        run: bash evals/validate-skills.sh

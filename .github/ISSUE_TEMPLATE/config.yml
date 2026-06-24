@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 文档 / Documentation
+    url: https://github.com/android-security-engineer/dex2jar-skills#readme
+    about: 使用前请先查阅 README 与 docs/FAQ.md / Read the README and docs/FAQ.md first
+  - name: 讨论区 / Discussions
+    url: https://github.com/android-security-engineer/dex2jar-skills/discussions
+    about: 开放式问题、想法、求助请在 Discussions 发起 / Open-ended questions and ideas
